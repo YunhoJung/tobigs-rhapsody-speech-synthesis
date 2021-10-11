@@ -1,6 +1,6 @@
 import os
 
-import ProgressBar
+import progressbar
 
 from augmentation.expand_data import pitch_up, pitch_down, speed_up, speed_down
 from augmentation.reduct_noise import reduce_noise_power, reduce_noise_centroid_s, reduce_noise_centroid_mb, \
@@ -9,7 +9,7 @@ from augmentation.utils import read_file, output_file
 
 
 if __name__ == "__main__":
-    bar = ProgressBar()
+    bar = progressbar.ProgressBar()
     chunk_path = "../../data/chunk"
     for file_name in bar(sorted(os.listdir(chunk_path))):
         y, sr = read_file(os.path.join(chunk_path, file_name))

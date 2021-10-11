@@ -10,7 +10,7 @@ from tensorflow.python.client import timeline
 from wavenet import WaveNetModel
 from datasets import DataFeederWavenet
 from hparams import hparams
-from utils import validate_directories,load,save,infolog
+from utils import validate_directories, load, save, infolog
 
 
 tf.logging.set_verbosity(tf.logging.ERROR)
@@ -34,19 +34,19 @@ def main():
     LOGDIR = None
     #LOGDIR = './logdir-wavenet/train/2018-12-21T22-58-10'
 
-    parser.add_argument('--logdir', type=str, default=LOGDIR,help='Directory in which to store the logging information for TensorBoard. If the model already exists, it will restore the state and will continue training. Cannot use with --logdir_root and --restore_from.')
+    parser.add_argument('--logdir', type=str, default=LOGDIR, help='Directory in which to store the logging information for TensorBoard. If the model already exists, it will restore the state and will continue training. Cannot use with --logdir_root and --restore_from.')
 
-    parser.add_argument('--logdir_root', type=str, default=None,help='Root directory to place the logging output and generated model. These are stored under the dated subdirectory of --logdir_root. Cannot use with --logdir.')
-    parser.add_argument('--restore_from', type=str, default=None,help='Directory in which to restore the model from. This creates the new model under the dated directory in --logdir_root. Cannot use with --logdir.')
+    parser.add_argument('--logdir_root', type=str, default=None, help='Root directory to place the logging output and generated model. These are stored under the dated subdirectory of --logdir_root. Cannot use with --logdir.')
+    parser.add_argument('--restore_from', type=str, default=None, help='Directory in which to restore the model from. This creates the new model under the dated directory in --logdir_root. Cannot use with --logdir.')
 
     CHECKPOINT_EVERY = 1000
-    parser.add_argument('--checkpoint_every', type=int, default=CHECKPOINT_EVERY,help='How many steps to save each checkpoint after. Default: ' + str(CHECKPOINT_EVERY) + '.')
+    parser.add_argument('--checkpoint_every', type=int, default=CHECKPOINT_EVERY, help='How many steps to save each checkpoint after. Default: ' + str(CHECKPOINT_EVERY) + '.')
 
     config = parser.parse_args()
     config.data_dir = config.data_dir.split(",")
     
     try:
-        directories = validate_directories(config,hparams)
+        directories = validate_directories(config, hparams)
     except ValueError as e:
         print("Some arguments are wrong:")
         print(str(e))
@@ -133,7 +133,7 @@ def main():
 
     start_step = sess.run(global_step)
     try:        
-        reader.start_in_session(sess,start_step)
+        reader.start_in_session(sess, start_step)
         while not coord.should_stop():
             
             start_time = time.time()
@@ -148,7 +148,7 @@ def main():
                 with open(timeline_path, 'w') as f:
                     f.write(tl.generate_chrome_trace_format(show_memory=True))
             else:
-                step, loss_value, _ = sess.run([global_step,net.loss, net.optimize])
+                step, loss_value, _ = sess.run([global_step, net.loss, net.optimize])
 
             duration = time.time() - start_time
             log('step {:d} - loss = {:.3f}, ({:.3f} sec/step)'.format(step, loss_value, duration))
